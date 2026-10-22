@@ -1,0 +1,8 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: sample-app
+  namespace: sample-app
+spec:
+  hosts:
+    - "${hostname}"

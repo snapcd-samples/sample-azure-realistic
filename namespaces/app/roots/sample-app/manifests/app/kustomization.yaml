@@ -1,0 +1,7 @@
+namespace: sample-app
+
+resources:
+  - serviceaccount.yaml
+  - deployment.yaml
+  - service.yaml
+  - virtualservice.yaml
