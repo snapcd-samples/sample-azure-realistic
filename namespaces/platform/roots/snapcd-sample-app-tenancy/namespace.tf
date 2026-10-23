@@ -1,9 +1,10 @@
 locals {
-  state_url = "${var.snapcd_server_url_from_runner}/api/${var.organization_id}/state/${var.state_store_id}"
+  state_url = "${var.snapcd_server_url_from_runner}/api/${var.organization_id}/state/${snapcd_state_store.this.id}"
 }
 
+
 resource "snapcd_namespace" "this" {
-  name                                = var.name
+  name                                = var.namespace_name
   stack_id                            = var.stack_id
   default_engine                      = "OpenTofu"
   default_apply_approval_threshold    = 1
@@ -197,7 +198,7 @@ terraform {
 provider "azurerm" {
   subscription_id                 = var.extra_subscription_id
   tenant_id                       = var.extra_tenant_id
-  resource_provider_registrations = "${var.resource_provider_registrations}"
+  resource_provider_registrations = "none"
   features {}
 }
 
@@ -205,7 +206,7 @@ provider "azurerm" {
   alias                           = "default"
   subscription_id                 = var.extra_subscription_id
   tenant_id                       = var.extra_tenant_id
-  resource_provider_registrations = "${var.resource_provider_registrations}"
+  resource_provider_registrations = "none"
   features {
     key_vault {
       purge_soft_delete_on_destroy          = false

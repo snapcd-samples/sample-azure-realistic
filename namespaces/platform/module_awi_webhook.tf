@@ -1,6 +1,6 @@
 resource "snapcd_module" "awi_webhook" {
   name                 = "awi_webhook"
-  namespace_id         = module.namespace[local.name].id
+  namespace_id         = snapcd_namespace.platform.id
   source_revision      = "main"
   source_revision_type = "Default"
   source_type          = "Git"

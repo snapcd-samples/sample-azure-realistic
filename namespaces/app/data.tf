@@ -26,13 +26,13 @@ data "snapcd_module" "istio_infra" {
   namespace_id = data.snapcd_namespace.platform.id
 }
 
-data "snapcd_module" "app_landing_zone" {
-  name         = "app_landing_zone"
+data "snapcd_module" "sample_app_tenancy_azure" {
+  name         = "sample_app_tenancy_azure"
   namespace_id = data.snapcd_namespace.platform.id
 }
 
-data "snapcd_module" "sample_app_tenancy" {
-  name         = "sample_app_tenancy"
+data "snapcd_module" "sample_app_tenancy_k8s" {
+  name         = "sample_app_tenancy_k8s"
   namespace_id = data.snapcd_namespace.platform.id
 }
 

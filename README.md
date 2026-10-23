@@ -7,9 +7,9 @@ The workload is `sample-app` (source in `app/`), a small .NET app that signs in 
 ## Layout
 
 ```
-namespaces/platform/        Terraform root: stack `demo`, namespaces `platform` and `app`, and the platform modules
+namespaces/platform/        Terraform root: stack `demo`, namespace `platform`, and the platform modules
 namespaces/platform/roots/  the platform modules' root modules, one per Snap CD module (each has its own state)
-namespaces/app/             Terraform root: the sample-app modules, deployed into the `app` namespace created by platform
+namespaces/app/             Terraform root: the sample-app modules, deployed into the `app` namespace created by platform's `sample_app_tenancy_snapcd`
 namespaces/app/roots/       the sample-app modules' root modules
 modules/                    shared child modules, referenced from the roots by relative path
 app/                        sample-app source, Dockerfile; published to GHCR by .github/workflows/sample-app.yaml
@@ -17,15 +17,17 @@ app/                        sample-app source, Dockerfile; published to GHCR by 
 
 Each `snapcd_module` points at this repo with `source_subdirectory = "namespaces/<namespace>/roots/<name>"`. The namespaces set `default_trigger_path_filter_enabled = true`, so a commit only redeploys the modules whose directories it touches. Relative module calls such as `../../../../modules/akv` count as part of the calling module's watched directories.
 
-`namespaces/app` looks up the stack, the `app` namespace and the platform modules it depends on with data sources, so `platform` must be applied first.
+`namespaces/app` looks up the stack, the `app` namespace and the platform modules it depends on with data sources, so `platform` must be applied first and its `sample_app_tenancy_snapcd` job must have finished.
 
 ## Separation between platform and app
 
 The `app` namespace shows how Snap CD and Azure permissions keep an application team inside its own boundary. Three identities must exist beforehand; their names and IDs are variables, never created here:
 
+Platform creates the `app` namespace in three parts, one module each: `sample_app_tenancy_snapcd` (the Snap CD namespace, its state store, runner supply and role assignments), `sample_app_tenancy_azure` (the resource group and Azure roles) and `sample_app_tenancy_k8s` (the Kubernetes namespace, Role and Gateway).
+
 - **The app team** - a Snap CD service principal. `namespaces/app` is applied with its credentials. It is Owner of the `app` namespace and MetadataReader on the `demo` stack and on the app runner, so it can look up the platform modules it takes outputs from.
 - **The app runner** - a Snap CD runner and its Snap CD service principal. It is supplied to the `app` namespace only, and is Contributor on the `app` state store, which holds the app modules' state.
-- **The app runner's Azure identity** - an existing Entra service principal the app runner signs in to Azure as. Platform's `app_landing_zone` gives it Contributor on the `app` resource group and Role Based Access Control Administrator there, limited to assigning Key Vault Administrator and Key Vault Secrets User. Platform's `sample_app_tenancy` gives it a Role in the `sample-app` Kubernetes namespace, and nothing elsewhere in the cluster.
+- **The app runner's Azure identity** - an existing Entra service principal the app runner signs in to Azure as. Platform's `sample_app_tenancy_azure` gives it Contributor on the `app` resource group and Role Based Access Control Administrator there, limited to assigning Key Vault Administrator and Key Vault Secrets User. Platform's `sample_app_tenancy_k8s` gives it a Role in the `sample-app` Kubernetes namespace, and nothing elsewhere in the cluster.
 
 The platform runner is supplied to the `platform` namespace only. Its Snap CD identity is expected to be an Organization Owner and its Azure identity to have broad rights on the subscription.
 
@@ -35,11 +37,11 @@ The platform runner is supplied to the `platform` namespace only. Its Snap CD id
 platform:  base ──> network ──┬──> cluster ──> istio, cert_manager ──> cert_manager_cluster_issuer, awi_webhook
                               ├──> istio_infra ──> istio
                               └──> sql_server
-           app_landing_zone
-           cluster, istio_infra, istio, cert_manager_cluster_issuer ──> sample_app_tenancy
+           sample_app_tenancy_snapcd, sample_app_tenancy_azure
+           cluster, istio_infra, istio, cert_manager_cluster_issuer ──> sample_app_tenancy_k8s
 
 app:       sample_app_infra ──> sample_app_infra_config ──> sample_app
-           sample_app_infra takes outputs from platform's app_landing_zone and cluster; sample_app from cluster and istio_infra, and waits for sample_app_tenancy and awi_webhook
+           sample_app_infra takes outputs from platform's sample_app_tenancy_azure and cluster; sample_app from cluster and istio_infra, and waits for sample_app_tenancy_k8s and awi_webhook
 ```
 
 ## Usage

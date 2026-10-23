@@ -35,9 +35,9 @@ output "sample_app_demo_secret_name" {
 }
 
 output "sample_app_identity_client_id" {
-  value = module.aad_identity.client_id
+  value = module.workload_identity.client_id
 }
 
 output "sample_app_identity_principal_id" {
-  value = module.aad_identity.principal_id
+  value = module.workload_identity.principal_id
 }

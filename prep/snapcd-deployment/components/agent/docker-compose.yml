@@ -1,0 +1,33 @@
+services:
+  snapcd-agent:
+    image: ghcr.io/schrieksoft/snapcd/snapcd-agent:1.14.3
+    restart: unless-stopped
+    depends_on:
+      - snapcd-agent-sidecar-claude
+    volumes:
+      - ./config/appsettings.json:/app/appsettings.json:ro
+      # Optional: layer environment-specific overrides on top of the committed defaults.
+      # Create components/agent/config/appsettings.Production.json (gitignored).
+      - ./config/appsettings.Production.json:/app/appsettings.Production.json:ro
+    networks:
+      - snapcd-net
+
+  snapcd-agent-sidecar-claude:
+    image: ghcr.io/schrieksoft/snapcd/snapcd-agent-sidecar-claude:1.14.3
+    restart: unless-stopped
+    environment:
+      # The sidecar reaches Snap CD Server for MCP via the same hostname the agent uses.
+      # MCP is served at {SNAPCD_BASE_URL}/mcp.
+      SNAPCD_BASE_URL: "http://snapcd-server:5000"
+      # Claude auth, read from the process environment by the Claude Code CLI. Set exactly one:
+      # a subscription token, or an API key. The sidecar starts without either and fails at
+      # mission time.
+      CLAUDE_CODE_OAUTH_TOKEN: "${CLAUDE_CODE_OAUTH_TOKEN:-}"
+      ANTHROPIC_API_KEY: "${ANTHROPIC_API_KEY:-}"
+      # PAT used by the pre-installed git/gh for the AutoFix path (clone + open PR).
+      GITHUB_TOKEN: "${GITHUB_TOKEN:-}"
+    networks:
+      - snapcd-net
+
+networks:
+  snapcd-net:

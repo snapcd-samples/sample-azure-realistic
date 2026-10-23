@@ -1,0 +1,53 @@
+# Authenticates to Azure and AKS as a service principal from ambient ARM_* credentials.
+services:
+  snapcd-runner-app:
+    image: ghcr.io/schrieksoft/snapcd/snapcd-runner-azure:1.14.3
+    restart: unless-stopped
+    entrypoint: ["./SnapCd.Runner", "--urls", "http://0.0.0.0:5001"]
+    environment:
+      Runner__Id: ${APP_RUNNER_ID:-}
+      Runner__Instance: app
+      Runner__Credentials__ClientId: ${APP_RUNNER_CLIENT_ID:-}
+      Runner__Credentials__ClientSecret: ${APP_RUNNER_CLIENT_SECRET:-}
+      RunnerEnvVars__SNAPCD_CLIENT_ID: ${APP_RUNNER_CLIENT_ID:-}
+      RunnerEnvVars__SNAPCD_CLIENT_SECRET: ${APP_RUNNER_CLIENT_SECRET:-}
+      ARM_CLIENT_ID: ${APP_RUNNER_ARM_CLIENT_ID:-}
+      ARM_CLIENT_SECRET: ${APP_RUNNER_ARM_CLIENT_SECRET:-}
+      ARM_TENANT_ID: ${TENANT_ID:-}
+      ARM_SUBSCRIPTION_ID: ${SUBSCRIPTION_ID:-}
+    volumes:
+      - ./config/appsettings.json:/app/appsettings.json:ro
+      # Optional: layer environment-specific overrides on top of the committed defaults.
+      # Create components/runner-app/config/appsettings.Production.json (gitignored).
+      - ./config/appsettings.Production.json:/app/appsettings.Production.json:ro
+
+      # Must be unique per runner and per compose project.
+      - ${APP_RUNNER_DATA_DIR:-~/.snapcd/app-runner-data}:/app/runnerdata
+
+      # Pre-approved hooks directory (optional)
+      - ./config/preapproved-hooks:/app/preapproved-hooks:ro
+
+      # SSH keys for private Git repositories (optional)
+      - ./config/known_hosts:/root/.ssh/known_hosts:ro
+      - ./config/id_rsa:/root/.ssh/id_rsa:ro
+
+      # Terraform/OpenTofu binaries from host (pick one or both, edit path as needed)
+      - /usr/local/bin/terraform:/usr/local/bin/terraform:ro
+      - /usr/local/bin/tofu:/usr/local/bin/tofu:ro
+    networks:
+      - snapcd-net
+
+  # Forwards two ports on the Runner's own localhost: 5000 to the Server, and
+  # 9000 to the host machine, so URLs like http://localhost:5000 work identically
+  # on the host and inside the Runner (e.g. a state store served from the host).
+  runner-loopback-app:
+    image: alpine/socat
+    restart: unless-stopped
+    network_mode: "service:snapcd-runner-app"
+    depends_on:
+      - snapcd-runner-app
+    entrypoint: ["sh", "-c",
+      "socat TCP6-LISTEN:5000,fork,reuseaddr,ipv6only=0 TCP:snapcd-server:5000 & exec socat TCP6-LISTEN:9000,fork,reuseaddr,ipv6only=0 TCP:$(ip route | awk '/default/{print $3; exit}'):9000"]
+
+networks:
+  snapcd-net:

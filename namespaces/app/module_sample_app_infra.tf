@@ -13,8 +13,8 @@ resource "snapcd_module" "sample_app_infra" {
 resource "snapcd_module_input_from_output_set" "sample_app_infra" {
   for_each = { for obj in [
     {
-      name             = "from_app_landing_zone"
-      output_module_id = data.snapcd_module.app_landing_zone.id
+      name             = "from_sample_app_tenancy_azure"
+      output_module_id = data.snapcd_module.sample_app_tenancy_azure.id
       input_kind       = "Param"
     },
     {

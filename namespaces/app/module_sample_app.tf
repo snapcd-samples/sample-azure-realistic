@@ -47,24 +47,25 @@ resource "snapcd_module_input_from_output" "sample_app" {
   module_id        = snapcd_module.sample_app.id
 }
 
-// Signs in to AKS as the runner's own Azure identity; 6dae42f8-... is the AKS Entra server application.
+// Signs in to AKS as the runner's own Azure identity (ARM_* env vars); 6dae42f8-... is the AKS Entra server application.
 resource "snapcd_module_extra_file" "sample_app" {
   for_each = { for obj in [
     {
       file_name = "extra_module_providers.tf"
       contents  = <<EOT
-data "external" "aks_token" {
-  program = ["az", "account", "get-access-token", "--resource", "6dae42f8-4368-4678-94ff-3960e28e3630", "--query", "{token: accessToken}", "--output", "json"]
-}
-
 provider "kustomization" {
   kubeconfig_raw = yamlencode({
-    apiVersion        = "v1"
-    kind              = "Config"
-    clusters          = [{ name = "aks", cluster = { server = var.extra_cluster_host, certificate-authority-data = base64encode(var.extra_cluster_ca_certificate) } }]
-    users             = [{ name = "runner", user = { token = data.external.aks_token.result.token } }]
-    contexts          = [{ name = "aks", context = { cluster = "aks", user = "runner" } }]
-    current-context   = "aks"
+    apiVersion = "v1"
+    kind       = "Config"
+    clusters   = [{ name = "aks", cluster = { server = var.extra_cluster_host, certificate-authority-data = base64encode(var.extra_cluster_ca_certificate) } }]
+    users = [{ name = "runner", user = { exec = {
+      apiVersion      = "client.authentication.k8s.io/v1beta1"
+      command         = "kubelogin"
+      args            = ["get-token", "--login", "spn", "--use-azurerm-env-vars", "--server-id", "6dae42f8-4368-4678-94ff-3960e28e3630"]
+      interactiveMode = "Never"
+    } } }]
+    contexts        = [{ name = "aks", context = { cluster = "aks", user = "runner" } }]
+    current-context = "aks"
   })
 }
   EOT
@@ -88,11 +89,11 @@ variable "extra_cluster_ca_certificate" {
   overwrite = false
 }
 
-// The namespace, the deploy rights and the Gateway come from sample_app_tenancy; the pod's token injection from awi_webhook.
+// The namespace, the deploy rights and the Gateway come from sample_app_tenancy_k8s; the pod's token injection from awi_webhook.
 resource "snapcd_depends_on_module" "sample_app" {
   for_each = {
-    sample_app_tenancy = data.snapcd_module.sample_app_tenancy.id
-    awi_webhook        = data.snapcd_module.awi_webhook.id
+    sample_app_tenancy_k8s = data.snapcd_module.sample_app_tenancy_k8s.id
+    awi_webhook            = data.snapcd_module.awi_webhook.id
   }
   module_id            = snapcd_module.sample_app.id
   depends_on_module_id = each.value

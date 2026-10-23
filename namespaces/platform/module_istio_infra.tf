@@ -1,6 +1,6 @@
 resource "snapcd_module" "istio_infra" {
   name                 = "istio_infra"
-  namespace_id         = module.namespace[local.name].id
+  namespace_id         = snapcd_namespace.platform.id
   source_revision      = "main"
   source_revision_type = "Default"
   source_type          = "Git"

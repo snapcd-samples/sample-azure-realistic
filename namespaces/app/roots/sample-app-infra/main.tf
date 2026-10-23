@@ -106,8 +106,8 @@ resource "azurerm_key_vault_secret" "demo" {
 /////////////////////////////////////////////////////////////////
 
 
-module "aad_identity" {
-  source                  = "../../../../modules/aad-identity"
+module "workload_identity" {
+  source                  = "../../../../modules/workload-identity"
   resource_group_name     = var.app_resource_group_name
   location                = var.location
   cluster_name            = var.cluster_name
@@ -125,5 +125,5 @@ module "aad_identity" {
 resource "azurerm_role_assignment" "sample_app_akv_user" {
   scope                = module.akv.id
   role_definition_name = "Key Vault Secrets User"
-  principal_id         = module.aad_identity.principal_id
+  principal_id         = module.workload_identity.principal_id
 }
