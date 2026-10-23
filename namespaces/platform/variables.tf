@@ -1,10 +1,13 @@
-variable "snapcd_url" {}
+variable "snapcd_url" {
+  default = "http://localhost:9000"
+}
 variable "snapcd_client_id" {}
 variable "snapcd_client_secret" {
   sensitive = true
 }
 variable "snapcd_organization_id" {}
 variable "snapcd_server_url_from_runner" {
+  default     = "http://snapcd-server:5000"
   description = "Snap CD server URL as the runners reach it, for the state store backend."
 }
 

@@ -1,4 +1,3 @@
-snapcd_url             = "http://localhost:5000"
 snapcd_client_id       = ""
 snapcd_client_secret   = ""
 snapcd_organization_id = ""

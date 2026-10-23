@@ -1,4 +1,6 @@
-variable "snapcd_url" {}
+variable "snapcd_url" {
+  default = "http://localhost:9000"
+}
 variable "snapcd_client_id" {}
 variable "snapcd_client_secret" {
   sensitive = true

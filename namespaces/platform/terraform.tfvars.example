@@ -1,8 +1,6 @@
-snapcd_url                    = "http://localhost:5000"
-snapcd_client_id              = ""
-snapcd_client_secret          = ""
-snapcd_organization_id        = ""
-snapcd_server_url_from_runner = "http://snapcd-server:5000"
+snapcd_client_id       = ""
+snapcd_client_secret   = ""
+snapcd_organization_id = ""
 
 platform_runner_name          = ""
 app_runner_name               = ""
