@@ -17,12 +17,6 @@ resource "snapcd_module_input_from_literal" "base" {
       literal_value = local.name
       type          = "String"
       input_kind    = "Param"
-    },
-    {
-      name          = "name"
-      literal_value = local.name
-      type          = "String"
-      input_kind    = "Param"
     }
   ] : obj.name => obj }
   name          = each.value.name
