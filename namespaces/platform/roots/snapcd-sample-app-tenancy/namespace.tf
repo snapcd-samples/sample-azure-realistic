@@ -182,57 +182,12 @@ resource "snapcd_namespace_input_from_literal" "this" {
   input_kind    = each.value.input_kind
 }
 
+// Kept outside *.tf so the runner's variable discovery does not read the variable blocks inside them.
 resource "snapcd_namespace_extra_file" "this" {
-  for_each = { for obj in [
-    {
-      file_name = "extra_namespace_root.tf"
-      contents  = <<EOT
-terraform {
-  backend "http" {}
-}
-  EOT
-    },
-    {
-      file_name = "extra_namespace_providers.tf"
-      contents  = <<EOT
-provider "azurerm" {
-  subscription_id                 = var.extra_subscription_id
-  tenant_id                       = var.extra_tenant_id
-  resource_provider_registrations = "none"
-  features {}
-}
+  for_each = fileset("${path.module}/extra-files", "*.tftpl")
 
-provider "azurerm" {
-  alias                           = "default"
-  subscription_id                 = var.extra_subscription_id
-  tenant_id                       = var.extra_tenant_id
-  resource_provider_registrations = "none"
-  features {
-    key_vault {
-      purge_soft_delete_on_destroy          = false
-      purge_soft_deleted_secrets_on_destroy = false
-      purge_soft_deleted_keys_on_destroy    = false
-      recover_soft_deleted_keys             = true
-    }
-    resource_group {
-      prevent_deletion_if_contains_resources = false
-    }
-  }
-}
-
-  EOT
-    },
-    {
-      file_name = "extra_namespace_variables.tf"
-      contents  = <<EOT
-variable "extra_subscription_id" {}
-variable "extra_tenant_id" {}
-  EOT
-    },
-  ] : obj.file_name => obj }
-
-  file_name    = each.value.file_name
-  contents     = each.value.contents
+  file_name    = trimsuffix(each.value, "tpl")
+  contents     = file("${path.module}/extra-files/${each.value}")
   namespace_id = snapcd_namespace.this.id
   overwrite    = false
 }
