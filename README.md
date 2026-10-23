@@ -35,8 +35,7 @@ The platform runner is supplied to the `platform` namespace only. Its Snap CD id
 
 ```
 platform:  base ──> network ──┬──> cluster ──> istio, cert_manager ──> cert_manager_cluster_issuer, awi_webhook
-                              ├──> istio_infra ──> istio
-                              └──> sql_server
+                              └──> istio_infra ──> istio
            sample_app_tenancy_snapcd, sample_app_tenancy_azure
            cluster, istio_infra, istio, cert_manager_cluster_issuer ──> sample_app_tenancy_k8s
 
