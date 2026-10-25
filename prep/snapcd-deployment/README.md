@@ -128,7 +128,7 @@ Edit `components/runner-platform/config/appsettings.json`:
 - Set `Server.Url` to `https://snapcd.io` (or your Self-Hosted Server's URL).
 - Set `Runner.Id`, `Runner.OrganizationId` and `Runner.Credentials` to the values shown when you registered the Runner in the Dashboard.
 
-Drop your SSH key at `components/runner-platform/config/id_rsa` if you want the Runner to clone private Git repositories (this file is gitignored — don't commit it).
+Drop your SSH key at `components/runner-platform/config/id_rsa` if you want the Runner to clone private Git repositories (this file is gitignored — don't commit it). The container copies it into `~/.ssh` at `0600` on start, so a key bind-mounted from a Windows host works without changing its permissions by hand.
 
 ### Agent (only) — pointed at Snap CD Cloud
 
