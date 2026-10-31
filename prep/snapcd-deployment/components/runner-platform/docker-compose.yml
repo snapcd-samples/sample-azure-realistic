@@ -1,7 +1,7 @@
 # Signed in to Azure interactively after start (see `make up`).
 services:
   snapcd-runner-platform:
-    image: ghcr.io/schrieksoft/snapcd/snapcd-runner-azure:1.15.0
+    image: ghcr.io/schrieksoft/snapcd/snapcd-runner-azure:1.15.6
     restart: unless-stopped
     entrypoint: ["/app/entrypoint.sh", "--urls", "http://0.0.0.0:5001"]
     environment:
