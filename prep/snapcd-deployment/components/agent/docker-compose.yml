@@ -1,7 +1,23 @@
 services:
   snapcd-agent:
-    image: ghcr.io/schrieksoft/snapcd/snapcd-agent:1.15.6
+    image: ghcr.io/schrieksoft/snapcd/snapcd-agent:1.15.10
     restart: unless-stopped
+    read_only: true
+    tmpfs:
+      - /tmp
+      - /home/app:uid=1654,gid=1654,mode=0700
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 512M
+        reservations:
+          cpus: "0.05"
+          memory: 128M
     depends_on:
       - snapcd-agent-sidecar-claude
     volumes:
@@ -14,8 +30,20 @@ services:
       - snapcd-net
 
   snapcd-agent-sidecar-claude:
-    image: ghcr.io/schrieksoft/snapcd/snapcd-agent-sidecar-claude:1.15.6
+    image: ghcr.io/schrieksoft/snapcd/snapcd-agent-sidecar-claude:1.15.10
     restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 2G
+        reservations:
+          cpus: "0.1"
+          memory: 256M
     environment:
       # The sidecar reaches Snap CD Server for MCP via the same hostname the agent uses.
       # MCP is served at {SNAPCD_BASE_URL}/mcp.
