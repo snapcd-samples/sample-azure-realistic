@@ -30,7 +30,7 @@ services:
       - app-runner-ssh:/staged
 
   snapcd-runner-app:
-    image: ghcr.io/schrieksoft/snapcd/snapcd-runner-azure:1.15.10
+    image: ghcr.io/schrieksoft/snapcd/snapcd-runner-azure:1.15.12
     restart: unless-stopped
     read_only: true
     tmpfs:
