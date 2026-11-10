@@ -1,0 +1,16 @@
+snapcd_url           = "https://snapcd.eastus2.cloudapp.azure.com"
+snapcd_client_id     = "default"
+snapcd_client_secret = ""
+
+tenant_id               = ""
+subscription_id         = ""
+location                = "eastus2"
+administrator_object_id = ""
+
+cluster_name                = "platform"
+cluster_resource_group_name = "platform"
+
+backend_akv_name                   = "snapcd-azure-testing"
+backend_akv_resource_group_name    = "default"
+platform_runner_client_id          = ""
+platform_runner_client_secret_name = "snapcd-platform-runner-client-secret"

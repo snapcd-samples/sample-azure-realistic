@@ -62,3 +62,6 @@ CLAUDE.local.md
 .augment/
 AGENTS.md
 .agent/
+
+# Local files left from the removed Docker Compose bootstrap (keys, credentials)
+/prep/

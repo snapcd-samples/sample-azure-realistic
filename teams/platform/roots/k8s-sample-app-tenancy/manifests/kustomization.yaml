@@ -1,6 +1,0 @@
-resources:
-  - namespace.yaml
-  - role.yaml
-  - rolebinding.yaml
-  - gateway.yaml
-  - certificate.yaml

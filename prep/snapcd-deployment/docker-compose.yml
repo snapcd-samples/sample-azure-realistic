@@ -1,5 +1,0 @@
-include:
-  - components/server/docker-compose.yml
-  - components/runner-platform/docker-compose.yml
-  - components/runner-app/docker-compose.yml
-  - components/agent/docker-compose.yml
