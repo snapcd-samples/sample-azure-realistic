@@ -14,6 +14,12 @@ resource "snapcd_module" "app_tenancy_azure" {
   runner_id            = snapcd_runner.platform.id
 }
 
+// The tenancy Modules run on the platform Runner, so a destroy must remove them before the Runner.
+resource "snapcd_depends_on_module" "app_tenancy_azure" {
+  module_id            = snapcd_module.app_tenancy_azure.id
+  depends_on_module_id = snapcd_module.platform_runner.id
+}
+
 resource "snapcd_module_input_from_literal" "app_tenancy_azure" {
   for_each = {
     name = var.app_tenancy_name
