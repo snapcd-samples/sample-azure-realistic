@@ -21,7 +21,7 @@ variable "chart_version" {
   default     = "0.1.20"
 }
 variable "app_tenancy_name" {
-  description = "Name of the app tenancy: its Kubernetes namespace, Snap CD stack, namespace and Runner, and the prefix of its Azure resources."
+  description = "Name of the app tenancy: its Kubernetes namespace, its Snap CD namespace (in the platform stack), State Store and Runner, and the prefix of its Azure resources."
   default     = "app"
 }
 variable "app_runner_client_id" {

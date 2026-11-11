@@ -43,7 +43,7 @@ The resource group is `platform-team` because the cluster's own resource group c
 | `app_tenancy_azure` | `roots/app-tenancy-azure` | The `app-team` resource group, the app Runner's workload identity and Key Vault. The identity is Contributor on its resource group, and may assign only the Key Vault roles there |
 | `app_tenancy_azure_config` | `roots/app-tenancy-azure-config` | The app Runner's SSH key, in its Key Vault |
 | `app_tenancy_k8s` | `roots/app-tenancy-k8s` | The `app` Kubernetes namespace, and a Role in it for the app Runner. The app Runner has no rights outside this namespace |
-| `app_tenancy_snapcd` | `roots/app-tenancy-snapcd` | The `app` stack, State Store and namespace, the `app-runner` Service Principal with its Federated Credential, and the `app` Runner. The app Runner is supplied to the `app` namespace only |
+| `app_tenancy_snapcd` | `roots/app-tenancy-snapcd` | The `app` namespace in the `platform` stack, the `app` State Store, the `app-runner` Service Principal with its Federated Credential, and the `app` Runner. The app Runner is supplied to the `app` namespace only, and is Contributor on it |
 | `app_runner` | `roots/app-runner` | The `snapcd-runner` chart for the app Runner, in the `app` Kubernetes namespace |
 
 To give the platform Runner these rights, `teams/platform` makes it an Owner of the Snap CD organization, `platform_infra` gives it a custom Azure role that can create resource groups, managed identities and Key Vaults and can assign only the roles a tenancy hands out, and `platform_k8s` gives it a ClusterRole to create namespaces and install Runners.

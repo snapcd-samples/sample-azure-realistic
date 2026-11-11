@@ -1,7 +1,11 @@
 // Applied once by hand, by a member of the app team signed in with the snapcd CLI.
 variable "tenancy_name" {
-  description = "Name of the tenancy that the platform team created: its Snap CD stack, namespace and Runner."
+  description = "Name of the tenancy that the platform team created: its Snap CD namespace and Runner."
   default     = "app"
+}
+variable "stack_name" {
+  description = "The platform team's stack, which holds the tenancy's namespace."
+  default     = "platform"
 }
 variable "server_url_from_runner" {
   description = "The Snap CD Server, as the Runners in the cluster reach it."

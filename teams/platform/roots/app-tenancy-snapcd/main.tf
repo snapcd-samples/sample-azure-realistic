@@ -1,7 +1,3 @@
-resource "snapcd_stack" "this" {
-  name = var.name
-}
-
 resource "snapcd_state_store" "this" {
   name = var.name
 }
@@ -9,7 +5,7 @@ resource "snapcd_state_store" "this" {
 module "namespace" {
   source                 = "../../../../modules/snapcd-namespace"
   name                   = var.name
-  stack_id               = snapcd_stack.this.id
+  stack_id               = var.stack_id
   state_store_id         = snapcd_state_store.this.id
   organization_id        = var.organization_id
   server_url_from_runner = var.server_url_from_runner

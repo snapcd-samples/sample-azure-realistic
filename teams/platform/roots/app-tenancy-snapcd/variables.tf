@@ -1,5 +1,8 @@
 variable "name" {
-  description = "Name of the tenancy: its Snap CD stack, namespace, State Store and Runner."
+  description = "Name of the tenancy: its Snap CD namespace, State Store and Runner."
+}
+variable "stack_id" {
+  description = "The platform's stack. The tenancy's namespace goes in it, next to the platform namespace."
 }
 variable "organization_id" {}
 variable "server_url_from_runner" {}

@@ -1,10 +1,10 @@
-data "snapcd_stack" "tenancy" {
-  name = var.tenancy_name
+data "snapcd_stack" "platform" {
+  name = var.stack_name
 }
 
 data "snapcd_namespace" "tenancy" {
   name     = var.tenancy_name
-  stack_id = data.snapcd_stack.tenancy.id
+  stack_id = data.snapcd_stack.platform.id
 }
 
 data "snapcd_runner" "tenancy" {

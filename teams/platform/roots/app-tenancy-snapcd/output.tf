@@ -1,6 +1,3 @@
-output "app_stack_id" {
-  value = snapcd_stack.this.id
-}
 output "app_namespace_id" {
   value = module.namespace.id
 }
