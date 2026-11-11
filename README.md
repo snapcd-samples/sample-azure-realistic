@@ -59,7 +59,7 @@ You need the snapcd CLI on your machine, version 1.18.0 or later. You apply `tea
 In short:
 
 ```bash
-snapcd context add azure --url https://snapcd.<location>.cloudapp.azure.com
+snapcd context add azure --url https://<label>.<location>.cloudapp.azure.com
 snapcd login
 cd teams/platform/init
 cp terraform.tfvars.example terraform.tfvars   # then set the values

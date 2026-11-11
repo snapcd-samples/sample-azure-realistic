@@ -36,9 +36,11 @@ The CLI is one self-contained file. It does not need a .NET runtime.
 1. Add a context for the Server and sign in:
 
    ```bash
-   snapcd context add azure --url https://snapcd.<location>.cloudapp.azure.com
+   snapcd context add azure --url https://<label>.<location>.cloudapp.azure.com
    snapcd login
    ```
+
+   The URL is the `url` output of the `snapcd_server_app` Module in snapcd-deployment-azure.
 
    `snapcd login` opens your browser. Sign in as an Owner of the organization. If you belong to more than one organization, the CLI asks which one to use.
 
