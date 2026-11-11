@@ -32,7 +32,7 @@ output "name" {
   value = var.name
 }
 output "stack_id" {
-  value = snapcd_stack.platform.id
+  value = data.snapcd_stack.default.id
 }
 output "namespace_id" {
   value = module.namespace.id

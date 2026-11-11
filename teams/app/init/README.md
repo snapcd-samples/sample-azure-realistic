@@ -12,7 +12,7 @@ It creates the `app` Module in the tenancy's namespace, on the tenancy's Runner.
 
 ## Prerequisites
 
-1. The platform team has created the tenancy: the `app` namespace in the `platform` stack, and the `app` Runner, from the `app_tenancy_*` and `app_runner` Modules. See the [platform init README](../../platform/init/README.md).
+1. The platform team has created the tenancy: the `app` namespace in the `default` stack, and the `app` Runner, from the `app_tenancy_*` and `app_runner` Modules. See the [platform init README](../../platform/init/README.md).
 2. The snapcd CLI on your machine, version 1.18.0 or later. See "Install the snapcd CLI" in the platform init README.
 3. OpenTofu on your machine.
 4. A Snap CD user that can create Modules in the tenancy's namespace, for example an Owner of the organization.
@@ -35,9 +35,9 @@ It creates the `app` Module in the tenancy's namespace, on the tenancy's Runner.
    tofu apply
    ```
 
-   You need no tfvars file. The defaults find the `app` namespace in the `platform` stack. If the platform team used other names, set `tenancy_name` and `stack_name`.
+   You need no tfvars file. The defaults find the `app` namespace in the `default` stack. If the platform team used other names, set `tenancy_name` and `stack_name`.
 
-3. In the Dashboard, open the `app` namespace in the `platform` stack and approve the job of the `app` Module. Then approve the jobs of the sample app's Modules.
+3. In the Dashboard, open the `app` namespace in the `default` stack and approve the job of the `app` Module. Then approve the jobs of the sample app's Modules.
 
 ## Reach the app
 

@@ -1,5 +1,11 @@
-resource "snapcd_stack" "platform" {
-  name = var.name
+// The platform namespace and the tenancies' namespaces sit in the default stack, next to the default namespace.
+data "snapcd_stack" "default" {
+  name = "default"
+}
+
+// Forgets the former platform stack without deleting it: deleting a stack deletes its namespaces and their Modules.
+removed {
+  from = snapcd_stack.platform
 }
 
 resource "snapcd_state_store" "platform" {
@@ -9,7 +15,7 @@ resource "snapcd_state_store" "platform" {
 module "namespace" {
   source                 = "../../modules/snapcd-namespace"
   name                   = var.name
-  stack_id               = snapcd_stack.platform.id
+  stack_id               = data.snapcd_stack.default.id
   state_store_id         = snapcd_state_store.platform.id
   organization_id        = var.organization_id
   server_url_from_runner = var.server_url_from_runner

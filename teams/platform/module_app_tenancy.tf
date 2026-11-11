@@ -100,7 +100,7 @@ resource "snapcd_module" "app_tenancy_snapcd" {
 resource "snapcd_module_input_from_literal" "app_tenancy_snapcd" {
   for_each = {
     name                    = var.app_tenancy_name
-    stack_id                = snapcd_stack.platform.id
+    stack_id                = data.snapcd_stack.default.id
     organization_id         = var.organization_id
     server_url_from_runner  = var.server_url_from_runner
     cluster_oidc_issuer_url = var.cluster_oidc_issuer_url

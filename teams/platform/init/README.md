@@ -8,7 +8,7 @@ It creates these items on the Snap CD Server:
 - The supply of the `default` Runner to that namespace.
 - The `platform` Module in the `default` namespace. It runs `teams/platform` on the `default` Runner.
 
-The `platform` Module then creates the `platform` stack, namespace, State Store and Runner, and the Modules that deploy them. See the [sample README](../../../README.md).
+The `platform` Module then creates the `platform` namespace (also in the `default` stack), State Store and Runner, and the Modules that deploy them. See the [sample README](../../../README.md).
 
 ## Prerequisites
 

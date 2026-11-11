@@ -4,8 +4,8 @@ variable "tenancy_name" {
   default     = "app"
 }
 variable "stack_name" {
-  description = "The platform team's stack, which holds the tenancy's namespace."
-  default     = "platform"
+  description = "The stack that holds the tenancy's namespace."
+  default     = "default"
 }
 variable "server_url_from_runner" {
   description = "The Snap CD Server, as the Runners in the cluster reach it."

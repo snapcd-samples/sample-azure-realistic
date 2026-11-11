@@ -13,7 +13,7 @@ variable "cluster_oidc_issuer_url" {}
 variable "platform_runner_client_id" {}
 
 variable "name" {
-  description = "Name of the platform: its Snap CD stack, namespace, State Store and Runner, its Kubernetes namespace and Key Vault prefix. Its Azure resource group is <name>-team."
+  description = "Name of the platform: its Snap CD namespace, State Store and Runner, its Kubernetes namespace and Key Vault prefix. Its Azure resource group is <name>-team."
   default     = "platform"
 }
 variable "chart_version" {
@@ -21,7 +21,7 @@ variable "chart_version" {
   default     = "0.1.20"
 }
 variable "app_tenancy_name" {
-  description = "Name of the app tenancy: its Kubernetes namespace, its Snap CD namespace (in the platform stack), State Store and Runner, and the prefix of its Azure resources."
+  description = "Name of the app tenancy: its Kubernetes namespace, its Snap CD namespace (in the default stack), State Store and Runner, and the prefix of its Azure resources."
   default     = "app"
 }
 variable "app_runner_client_id" {
