@@ -1,7 +1,3 @@
-snapcd_url           = "https://snapcd.eastus2.cloudapp.azure.com"
-snapcd_client_id     = "default"
-snapcd_client_secret = ""
-
 tenant_id               = ""
 subscription_id         = ""
 location                = "eastus2"

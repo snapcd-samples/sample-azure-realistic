@@ -1,15 +1,7 @@
-// Applied once by hand, with an organization Owner's credentials.
-variable "snapcd_url" {
-  description = "The Snap CD Server, as this machine reaches it."
-}
-variable "snapcd_client_id" {
-  default = "default"
-}
-variable "snapcd_client_secret" {
-  sensitive = true
-}
+// Applied once by hand, as an organization Owner signed in with the snapcd CLI.
 variable "organization_id" {
-  default = "10000000-0000-0000-0000-000000000000"
+  description = "The organization of your snapcd CLI context. The Runners use it for the State Store and the Snap CD provider."
+  default     = "10000000-0000-0000-0000-000000000000"
 }
 variable "server_url_from_runner" {
   description = "The Snap CD Server, as the Runners in the cluster reach it."

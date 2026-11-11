@@ -54,18 +54,20 @@ Each Runner clones this repository over SSH with its own key. The key is generat
 
 ## Usage
 
-1. Copy `teams/platform/init/terraform.tfvars.example` to `terraform.tfvars` and fill it in. Git ignores it.
-   - `cluster_oidc_issuer_url` is the `cluster_oidc_issuer_url` output of the `cluster` Module in snapcd-deployment-azure.
-   - `snapcd_client_secret` is the `default` Service Principal's client secret. In snapcd-deployment-azure it is `snapcd-runner-client-secret` in the Server Key Vault.
-2. Apply it:
+You need the snapcd CLI on your machine, version 1.18.0 or later. You apply `teams/platform/init` one time, as yourself, signed in with `snapcd login`. No client secret is necessary. The [init README](teams/platform/init/README.md) tells you how to install the CLI and how to apply.
 
-   ```bash
-   cd teams/platform/init
-   tofu init
-   tofu apply
-   ```
+In short:
 
-3. In the Dashboard, approve the `platform` Module in the `default` namespace, then the Modules in the `platform` namespace.
+```bash
+snapcd context add azure --url https://snapcd.<location>.cloudapp.azure.com
+snapcd login
+cd teams/platform/init
+cp terraform.tfvars.example terraform.tfvars   # then set the values
+tofu init
+tofu apply
+```
+
+Then, in the Dashboard, approve the `platform` Module in the `default` namespace, and then the Modules in the `platform` namespace.
 
 `teams/platform/init` keeps its state locally (`terraform.tfstate`, which Git ignores). The Modules keep their state in Snap CD State Stores: `default` for the `default` namespace, `platform` for the `platform` namespace.
 

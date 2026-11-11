@@ -18,5 +18,5 @@ variable "name" {
 }
 variable "chart_version" {
   description = "Version of the snapcd-runner chart at oci://ghcr.io/schrieksoft/charts."
-  default     = "0.1.19"
+  default     = "0.1.20"
 }
