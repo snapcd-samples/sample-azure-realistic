@@ -5,6 +5,5 @@ locals {
   mssql_max_size_gb                 = 2
   mssql_creation_source_database_id = ""
   name                              = "sample-app"
-  namespace                         = "sample-app"
   demo_secret_name                  = "demo-message"
 }

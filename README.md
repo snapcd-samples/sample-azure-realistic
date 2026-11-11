@@ -4,7 +4,7 @@ A Snap CD sample of a platform team on Azure. The platform team owns a Snap CD n
 
 The sample runs on a Snap CD installation on AKS, such as the one that [snapcd-deployment-azure](https://github.com/schrieksoft/snapcd-deployment-azure) deploys. That installation supplies the cluster, the `default` stack, the `default` State Store and the `default` Runner.
 
-The platform team creates a tenancy for an application team. The application team's own configuration (`teams/app`) is not updated for this layout yet.
+The platform team creates a tenancy for an application team. The application team then deploys a sample app into its tenancy with its own Runner.
 
 ## Layout
 
@@ -12,7 +12,9 @@ The platform team creates a tenancy for an application team. The application tea
 teams/platform/init/          applied once by hand: the `default` namespace and the `platform` Module
 teams/platform/               the `platform` Module: the platform stack, namespace, State Store, Runner and its Modules
 teams/platform/roots/<name>/  one directory for each Module in the platform namespace
-teams/app/                    the application team (not updated yet)
+teams/app/init/               applied once by hand by the app team: the `app` Module in the tenancy
+teams/app/                    the `app` Module: the sample app's Modules
+teams/app/roots/<name>/       one directory for each Module of the sample app
 modules/                      shared child modules
 app/                          source of the sample application
 ```
@@ -47,6 +49,8 @@ The resource group is `platform-team` because the cluster's own resource group c
 To give the platform Runner these rights, `teams/platform` makes it an Owner of the Snap CD organization, `platform_infra` gives it a custom Azure role that can create resource groups, managed identities and Key Vaults and can assign only the roles a tenancy hands out, and `platform_k8s` gives it a ClusterRole to create namespaces and install Runners.
 
 `app_tenancy_name` in `teams/platform` sets the name of the tenancy. The default is `app`.
+
+5. An app team member applies `teams/app/init` from their machine. It creates the `app` Module in the tenancy's namespace, on the app Runner. The app Runner applies `teams/app`, which deploys the sample app. The app has no ingress. See the [app init README](teams/app/init/README.md).
 
 ## Identities
 

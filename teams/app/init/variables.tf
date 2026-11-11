@@ -1,0 +1,19 @@
+// Applied once by hand, by a member of the app team signed in with the snapcd CLI.
+variable "tenancy_name" {
+  description = "Name of the tenancy that the platform team created: its Snap CD stack, namespace and Runner."
+  default     = "app"
+}
+variable "server_url_from_runner" {
+  description = "The Snap CD Server, as the Runners in the cluster reach it."
+  default     = "http://snapcd-server.snapcd-server.svc.cluster.local:5000"
+}
+variable "organization_id" {
+  description = "The organization of your snapcd CLI context."
+  default     = "10000000-0000-0000-0000-000000000000"
+}
+variable "source_url" {
+  default = "git@github.com:snapcd-samples/sample-azure-realistic.git"
+}
+variable "source_revision" {
+  default = "main"
+}

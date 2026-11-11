@@ -1,6 +1,11 @@
 
 data "azurerm_client_config" "current" {}
 
+data "azurerm_kubernetes_cluster" "this" {
+  name                = var.cluster_name
+  resource_group_name = var.cluster_resource_group_name
+}
+
 
 /////////////////////////////////////////////////////////////////
 // MSSQL Server and Database
@@ -18,7 +23,7 @@ resource "random_string" "mssql_server_name" {
 resource "azurerm_mssql_server" "this" {
   name                = "sample-app-${random_string.mssql_server_name.result}"
   location            = var.location
-  resource_group_name = var.app_resource_group_name
+  resource_group_name = var.resource_group_name
   version             = "12.0"
   minimum_tls_version = "1.2"
 
@@ -68,7 +73,7 @@ module "akv" {
   source                          = "../../../../modules/akv"
   name                            = "sample-app-${random_string.akv.result}"
   location                        = var.location
-  resource_group_name             = var.app_resource_group_name
+  resource_group_name             = var.resource_group_name
   tenant_id                       = var.tenant_id
   soft_delete_retention_days      = 7
   purge_protection_enabled        = false
@@ -77,11 +82,7 @@ module "akv" {
   enabled_for_disk_encryption     = false
   enabled_for_template_deployment = false
   enable_rbac_authorization       = true
-  administrator_object_ids        = [var.administrator_object_id, data.azurerm_client_config.current.object_id]
-
-  providers = {
-    azurerm = azurerm.default
-  }
+  administrator_object_ids        = [data.azurerm_client_config.current.object_id]
 }
 
 
@@ -97,7 +98,6 @@ resource "azurerm_key_vault_secret" "demo" {
   value        = "Hello from Azure Key Vault"
   key_vault_id = module.akv.id
 
-  provider = azurerm.default
 }
 
 
@@ -108,11 +108,11 @@ resource "azurerm_key_vault_secret" "demo" {
 
 module "workload_identity" {
   source                  = "../../../../modules/workload-identity"
-  resource_group_name     = var.app_resource_group_name
+  resource_group_name     = var.resource_group_name
   location                = var.location
   cluster_name            = var.cluster_name
-  cluster_oidc_issuer_url = var.cluster_oidc_issuer_url
-  namespace               = local.namespace
+  cluster_oidc_issuer_url = data.azurerm_kubernetes_cluster.this.oidc_issuer_url
+  namespace               = var.kubernetes_namespace
   service_account         = local.name
 }
 

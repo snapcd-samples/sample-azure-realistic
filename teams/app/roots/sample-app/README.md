@@ -1,7 +1,13 @@
 # sample-app
 
-Deploys `sample-app` (source in `app/` at the repo root) into the `sample-app` namespace, and attaches its VirtualService to the `istio-gateway/sample-app` Gateway. The namespace, the Gateway, the certificate and this module's Kubernetes rights come from the platform's `k8s-sample-app-tenancy` module.
+Deploys `sample-app` (source in `app/` at the repo root) into the tenancy's Kubernetes namespace, as a Deployment and a ClusterIP Service. It has no ingress. To reach it:
 
-The module signs in to the cluster as the runner's Azure identity, with an Entra token for the AKS server application, and can only manage the resource kinds the platform's Role allows in `sample-app`.
+```bash
+kubectl -n app port-forward service/sample-app 8080:80
+```
 
-The pod runs as the `sample-app` service account, federated with the managed identity from `sample_app_infra`, and reaches Azure SQL and Key Vault with that identity. No secrets are passed to the pod.
+Then open `http://localhost:8080`.
+
+The Module signs in to the cluster as the app Runner's workload identity, and can manage only the resource kinds that the platform's Role allows in the tenancy's namespace.
+
+The pod runs as the `sample-app` ServiceAccount, federated with the managed identity from `sample_app_infra`, and reaches Azure SQL and Key Vault with that identity. No secrets are passed to the pod.

@@ -23,6 +23,7 @@ module "namespace" {
     resource_group_name         = var.app_resource_group_name
     cluster_name                = var.cluster_name
     cluster_resource_group_name = var.cluster_resource_group_name
+    kubernetes_namespace        = var.name
   }
 }
 
@@ -55,4 +56,26 @@ resource "snapcd_state_store_role_assignment" "app_runner" {
   principal_id            = snapcd_service_principal.app_runner.id
   principal_discriminator = "ServicePrincipal"
   role_name               = "Contributor"
+}
+
+// Contributor: the app Runner's jobs define the tenancy's Modules in this namespace.
+resource "snapcd_namespace_role_assignment" "app_runner" {
+  namespace_id            = module.namespace.id
+  principal_id            = snapcd_service_principal.app_runner.id
+  principal_discriminator = "ServicePrincipal"
+  role_name               = "Contributor"
+}
+
+// Set here, not through the namespace module: they refer to the namespace and the Runner themselves.
+resource "snapcd_namespace_input_from_literal" "tenancy" {
+  for_each = {
+    app_namespace_id = module.namespace.id
+    app_runner_id    = snapcd_runner.this.id
+  }
+  name          = each.key
+  literal_value = each.value
+  type          = "String"
+  usage_mode    = "UseByDefault"
+  input_kind    = "Param"
+  namespace_id  = module.namespace.id
 }

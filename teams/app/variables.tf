@@ -1,9 +1,7 @@
-variable "snapcd_url" {
-  default = "http://localhost:9000"
-}
-variable "snapcd_client_id" {}
-variable "snapcd_client_secret" {
-  sensitive = true
-}
-variable "snapcd_organization_id" {}
-variable "app_runner_name" {}
+// From the app namespace, which the platform team's app_tenancy_snapcd Module creates.
+variable "app_namespace_id" {}
+variable "app_runner_id" {}
+
+// Set by the init Module.
+variable "source_url" {}
+variable "source_revision" {}

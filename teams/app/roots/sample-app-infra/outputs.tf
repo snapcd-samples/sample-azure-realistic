@@ -41,3 +41,7 @@ output "sample_app_identity_client_id" {
 output "sample_app_identity_principal_id" {
   value = module.workload_identity.principal_id
 }
+
+output "sample_app_service_account_name" {
+  value = local.name
+}
