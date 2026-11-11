@@ -58,3 +58,33 @@ resource "kubernetes_role_binding_v1" "deployer" {
     name      = var.app_workload_identity_principal_id
   }
 }
+
+// The Namespace object is cluster-scoped, so a Role inside it cannot let the app Runner read it.
+resource "kubernetes_cluster_role_v1" "namespace_reader" {
+  metadata {
+    name = "${var.name}-namespace-reader"
+  }
+
+  rule {
+    api_groups     = [""]
+    resources      = ["namespaces"]
+    resource_names = [kubernetes_namespace_v1.this.metadata[0].name]
+    verbs          = ["get"]
+  }
+}
+
+resource "kubernetes_cluster_role_binding_v1" "namespace_reader" {
+  metadata {
+    name = "${var.name}-namespace-reader"
+  }
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "ClusterRole"
+    name      = kubernetes_cluster_role_v1.namespace_reader.metadata[0].name
+  }
+  subject {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "User"
+    name      = var.app_workload_identity_principal_id
+  }
+}

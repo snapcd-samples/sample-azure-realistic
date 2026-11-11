@@ -16,10 +16,11 @@ resource "kubernetes_cluster_role_v1" "tenancy_creator" {
     verbs      = ["get", "list", "watch", "create", "update", "patch", "delete"]
   }
 
-  // bind and escalate let it grant an app Runner rights it does not hold itself.
+  // bind and escalate let it grant an app Runner rights it does not hold itself. The cluster-scoped
+  // kinds are for the one right a Role cannot hold: reading the tenancy's own Namespace object.
   rule {
     api_groups = ["rbac.authorization.k8s.io"]
-    resources  = ["roles", "rolebindings"]
+    resources  = ["roles", "rolebindings", "clusterroles", "clusterrolebindings"]
     verbs      = ["get", "list", "watch", "create", "update", "patch", "delete", "bind", "escalate"]
   }
 

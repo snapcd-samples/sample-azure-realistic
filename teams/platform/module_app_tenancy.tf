@@ -78,6 +78,12 @@ resource "snapcd_module_input_from_literal" "app_tenancy_k8s" {
   module_id     = snapcd_module.app_tenancy_k8s.id
 }
 
+// The platform Runner's cluster rights to create a tenancy come from platform_k8s.
+resource "snapcd_depends_on_module" "app_tenancy_k8s" {
+  module_id            = snapcd_module.app_tenancy_k8s.id
+  depends_on_module_id = snapcd_module.platform_k8s.id
+}
+
 resource "snapcd_module_input_from_output_set" "app_tenancy_k8s" {
   name             = "from_app_tenancy_azure"
   output_module_id = snapcd_module.app_tenancy_azure.id
