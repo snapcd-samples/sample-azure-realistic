@@ -30,3 +30,7 @@ variable "platform_runner_client_id" {
   description = "Client ID of the Snap CD Service Principal the platform Runner signs in as. teams/platform creates it."
   default     = "platform-runner"
 }
+
+variable "init_namespace_name" {
+  default = "platform-init"
+}

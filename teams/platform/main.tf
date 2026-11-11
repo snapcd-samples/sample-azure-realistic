@@ -3,10 +3,6 @@ data "snapcd_stack" "default" {
   name = "default"
 }
 
-// Forgets the former platform stack without deleting it: deleting a stack deletes its namespaces and their Modules.
-removed {
-  from = snapcd_stack.platform
-}
 
 resource "snapcd_state_store" "platform" {
   name = var.name

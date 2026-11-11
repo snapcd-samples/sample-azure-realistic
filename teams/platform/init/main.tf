@@ -12,7 +12,7 @@ data "snapcd_runner" "default" {
 
 module "namespace" {
   source                 = "../../../modules/snapcd-namespace"
-  name                   = "default"
+  name                   = var.init_namespace_name
   stack_id               = data.snapcd_stack.default.id
   state_store_id         = data.snapcd_state_store.default.id
   organization_id        = var.organization_id
