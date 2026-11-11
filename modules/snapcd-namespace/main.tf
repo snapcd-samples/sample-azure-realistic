@@ -14,7 +14,11 @@ locals {
         tenant_id                       = var.extra_tenant_id
         use_aks_workload_identity       = true
         resource_provider_registrations = "none"
-        features {}
+        features {
+          resource_group {
+            prevent_deletion_if_contains_resources = false
+          }
+        }
       }
     EOT
     // In their own file so a root that also declares subscription_id or tenant_id does not clash.
