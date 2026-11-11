@@ -28,3 +28,7 @@ variable "app_runner_client_id" {
   description = "Client ID of the Snap CD Service Principal the app Runner signs in as."
   default     = "app-runner"
 }
+variable "init_namespace_name" {
+  description = "The namespace that holds the platform Module, which applies this configuration."
+  default     = "platform-init"
+}

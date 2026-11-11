@@ -9,9 +9,10 @@ The platform team creates a tenancy for an application team. The application tea
 ## Layout
 
 ```
-teams/platform/init/          applied once by hand: the `default` namespace and the `platform` Module
-teams/platform/               the `platform` Module: the platform stack, namespace, State Store, Runner and its Modules
-teams/platform/roots/<name>/  one directory for each Module in the platform namespace
+teams/platform/init/          applied once by hand: the `platform-init` namespace and the `platform` Module
+teams/platform/               the `platform` Module: the platform namespace, State Store, Runner and its Modules
+teams/platform/tenancies/     the `app_tenancies` Module: the `app-tenancies` namespace and the tenancies' Modules
+teams/platform/roots/<name>/  one directory for each Module in the `platform` and `app-tenancies` namespaces
 teams/app/init/               applied once by hand by the app team: the `app` Module in the tenancy
 teams/app/                    the `app` Module: the sample app's Modules
 teams/app/roots/<name>/       one directory for each Module of the sample app
@@ -23,7 +24,7 @@ Each Module reads its code from this repository. The namespaces use path filters
 
 ## How it runs
 
-1. You apply `teams/platform/init` from your machine. It creates the `default` namespace in the `default` stack, and the `platform` Module in it, on the `default` Runner.
+1. You apply `teams/platform/init` from your machine. It creates the `platform-init` namespace in the `default` stack, and the `platform` Module in it, on the `default` Runner.
 2. The `default` Runner applies `teams/platform`. This creates the `platform` namespace in the `default` stack, the `platform` State Store and Runner, and the Modules below. All namespaces of the sample are in the `default` stack.
 3. The `default` Runner applies the Modules in the `platform` namespace:
 
@@ -36,7 +37,7 @@ Each Module reads its code from this repository. The namespaces use path filters
 
 The resource group is `platform-team` because the cluster's own resource group can already be called `platform`.
 
-4. The platform Runner applies the app tenancy. These Modules are also in the `platform` namespace, but they run on the platform Runner, with its limited rights:
+4. The platform Runner applies the `app_tenancies` Module, also in the `platform` namespace. It runs `teams/platform/tenancies`, which creates the `app-tenancies` namespace in the `default` stack and the Modules below. These Modules run on the platform Runner, with its limited rights:
 
 | Module | Root | Deploys |
 |---|---|---|
@@ -86,9 +87,9 @@ tofu init
 tofu apply
 ```
 
-Then, in the Dashboard, approve the `platform` Module in the `default` namespace, and then the Modules in the `platform` namespace.
+Then, in the Dashboard, approve the `platform` Module in the `platform-init` namespace, then the Modules in the `platform` namespace, and then the Modules in the `app-tenancies` namespace.
 
-`teams/platform/init` keeps its state locally (`terraform.tfstate`, which Git ignores). The Modules keep their state in Snap CD State Stores: `default` for the `default` namespace, `platform` for the `platform` namespace.
+`teams/platform/init` keeps its state locally (`terraform.tfstate`, which Git ignores). The Modules keep their state in Snap CD State Stores: `default` for the `platform-init` namespace, `platform` for the `platform` and `app-tenancies` namespaces, and `app` for the `app` namespace.
 
 ## Connect to the cluster
 

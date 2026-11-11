@@ -11,6 +11,17 @@ resource "snapcd_module" "sample_app_infra" {
   runner_id            = var.app_runner_id
 }
 
+data "snapcd_module" "app" {
+  name         = "app"
+  namespace_id = var.app_namespace_id
+}
+
+// The sample app's Modules run on the app Runner, so a destroy must remove them before the app Module and the Runner.
+resource "snapcd_depends_on_module" "sample_app_infra" {
+  module_id            = snapcd_module.sample_app_infra.id
+  depends_on_module_id = data.snapcd_module.app.id
+}
+
 resource "snapcd_module" "sample_app_infra_config" {
   name                 = "sample_app_infra_config"
   namespace_id         = var.app_namespace_id

@@ -21,3 +21,7 @@ variable "source_url" {
 variable "source_revision" {
   default = "main"
 }
+variable "tenancies_namespace_name" {
+  description = "The namespace that holds the tenancy's app_runner Module."
+  default     = "app-tenancies"
+}

@@ -1,8 +1,3 @@
-// Forgets the former tenancy stack without deleting it: deleting a stack deletes its namespaces and their Modules.
-removed {
-  from = snapcd_stack.this
-}
-
 resource "snapcd_state_store" "this" {
   name = var.name
 }

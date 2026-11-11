@@ -2,7 +2,7 @@
 
 This is the only configuration of the app team that you apply by hand. Apply it one time, from your machine. After that, the app Runner applies everything else.
 
-It creates the `app` Module in the tenancy's namespace, on the tenancy's Runner. The `app` Module runs `teams/app`, which creates the sample app's Modules:
+It creates the `app` Module in the tenancy's namespace, on the tenancy's Runner. The `app` Module depends on the tenancy's `app_runner` Module, so a destroy removes it before the Runner. The `app` Module runs `teams/app`, which creates the sample app's Modules:
 
 | Module | Root | Deploys |
 |---|---|---|
@@ -35,7 +35,7 @@ It creates the `app` Module in the tenancy's namespace, on the tenancy's Runner.
    tofu apply
    ```
 
-   You need no tfvars file. The defaults find the `app` namespace in the `default` stack. If the platform team used other names, set `tenancy_name` and `stack_name`.
+   You need no tfvars file. The defaults find the `app` namespace in the `default` stack, and the `app_runner` Module in the `app-tenancies` namespace. If the platform team used other names, set `tenancy_name`, `stack_name` and `tenancies_namespace_name`.
 
 3. In the Dashboard, open the `app` namespace in the `default` stack and approve the job of the `app` Module. Then approve the jobs of the sample app's Modules.
 

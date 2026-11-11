@@ -47,3 +47,19 @@ resource "snapcd_module_input_from_literal" "app" {
   input_kind    = "Param"
   module_id     = snapcd_module.app.id
 }
+
+data "snapcd_namespace" "tenancies" {
+  name     = var.tenancies_namespace_name
+  stack_id = data.snapcd_stack.this.id
+}
+
+data "snapcd_module" "app_runner" {
+  name         = "app_runner"
+  namespace_id = data.snapcd_namespace.tenancies.id
+}
+
+// The app Module runs on the app Runner, so a destroy must remove it before the Runner.
+resource "snapcd_depends_on_module" "app" {
+  module_id            = snapcd_module.app.id
+  depends_on_module_id = data.snapcd_module.app_runner.id
+}

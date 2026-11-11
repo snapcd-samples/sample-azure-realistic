@@ -4,11 +4,11 @@ This is the only configuration in the sample that you apply by hand. Apply it on
 
 It creates these items on the Snap CD Server:
 
-- The `default` namespace in the `default` stack, with the State Store backend and the `azurerm` provider settings that its Modules use.
+- The `platform-init` namespace in the `default` stack, with the State Store backend and the `azurerm` provider settings that its Modules use.
 - The supply of the `default` Runner to that namespace.
-- The `platform` Module in the `default` namespace. It runs `teams/platform` on the `default` Runner.
+- The `platform` Module in the `platform-init` namespace. It runs `teams/platform` on the `default` Runner.
 
-The `platform` Module then creates the `platform` namespace (also in the `default` stack), State Store and Runner, and the Modules that deploy them. See the [sample README](../../../README.md).
+The `platform` Module then creates the `platform` namespace (also in the `default` stack), State Store and Runner, and the Modules that deploy them. One of them, `app_tenancies`, creates the `app-tenancies` namespace and the Modules of the app tenancy. See the [sample README](../../../README.md).
 
 ## Prerequisites
 
@@ -71,7 +71,7 @@ The CLI is one self-contained file. It does not need a .NET runtime.
 
    The provider block is empty. The provider gets your access token, the Server URL and the organization from the snapcd CLI. You need no client secret.
 
-5. In the Dashboard, open the `default` namespace and approve the job of the `platform` Module. Then approve the jobs of the Modules in the `platform` namespace.
+5. In the Dashboard, open the `platform-init` namespace and approve the job of the `platform` Module. Then approve the jobs of the Modules in the `platform` namespace, and then the jobs of the Modules in the `app-tenancies` namespace.
 
 6. Add the public SSH key of the `platform` Runner to this repository as a read-only deploy key. The key is the `platform_runner_ssh_public_key_openssh` output of the `platform_infra_config` Module.
 

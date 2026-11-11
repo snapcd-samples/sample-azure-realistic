@@ -1,9 +1,7 @@
-/////////////////////////////////////////////////////////////////
-// The app tenancy, created by the platform Runner
-/////////////////////////////////////////////////////////////////
+// The app tenancy's Modules, on the platform Runner.
 
 resource "snapcd_module" "app_tenancy_azure" {
-  depends_on           = [snapcd_runner_namespace_supply.this, snapcd_organization_role_assignment.platform_runner]
+  depends_on           = [snapcd_runner_namespace_supply.platform]
   name                 = "app_tenancy_azure"
   namespace_id         = module.namespace.id
   source_type          = "Git"
@@ -11,13 +9,17 @@ resource "snapcd_module" "app_tenancy_azure" {
   source_revision      = var.source_revision
   source_revision_type = "Default"
   source_subdirectory  = "teams/platform/roots/app-tenancy-azure"
-  runner_id            = snapcd_runner.platform.id
+  runner_id            = data.snapcd_runner.platform.id
 }
 
-// The tenancy Modules run on the platform Runner, so a destroy must remove them before the Runner.
+// The tenancy Modules run on the platform Runner, and app_tenancies defines them, so a destroy must remove them before both.
 resource "snapcd_depends_on_module" "app_tenancy_azure" {
+  for_each = {
+    platform_runner = data.snapcd_module.platform_runner.id
+    app_tenancies   = data.snapcd_module.app_tenancies.id
+  }
   module_id            = snapcd_module.app_tenancy_azure.id
-  depends_on_module_id = snapcd_module.platform_runner.id
+  depends_on_module_id = each.value
 }
 
 resource "snapcd_module_input_from_literal" "app_tenancy_azure" {
@@ -32,7 +34,7 @@ resource "snapcd_module_input_from_literal" "app_tenancy_azure" {
 }
 
 resource "snapcd_module" "app_tenancy_azure_config" {
-  depends_on           = [snapcd_runner_namespace_supply.this, snapcd_organization_role_assignment.platform_runner]
+  depends_on           = [snapcd_runner_namespace_supply.platform]
   name                 = "app_tenancy_azure_config"
   namespace_id         = module.namespace.id
   source_type          = "Git"
@@ -40,7 +42,7 @@ resource "snapcd_module" "app_tenancy_azure_config" {
   source_revision      = var.source_revision
   source_revision_type = "Default"
   source_subdirectory  = "teams/platform/roots/app-tenancy-azure-config"
-  runner_id            = snapcd_runner.platform.id
+  runner_id            = data.snapcd_runner.platform.id
 }
 
 resource "snapcd_module_input_from_literal" "app_tenancy_azure_config" {
@@ -62,7 +64,7 @@ resource "snapcd_module_input_from_output_set" "app_tenancy_azure_config" {
 }
 
 resource "snapcd_module" "app_tenancy_k8s" {
-  depends_on           = [snapcd_runner_namespace_supply.this, snapcd_organization_role_assignment.platform_runner]
+  depends_on           = [snapcd_runner_namespace_supply.platform]
   name                 = "app_tenancy_k8s"
   namespace_id         = module.namespace.id
   source_type          = "Git"
@@ -70,7 +72,7 @@ resource "snapcd_module" "app_tenancy_k8s" {
   source_revision      = var.source_revision
   source_revision_type = "Default"
   source_subdirectory  = "teams/platform/roots/app-tenancy-k8s"
-  runner_id            = snapcd_runner.platform.id
+  runner_id            = data.snapcd_runner.platform.id
 }
 
 resource "snapcd_module_input_from_literal" "app_tenancy_k8s" {
@@ -87,7 +89,7 @@ resource "snapcd_module_input_from_literal" "app_tenancy_k8s" {
 // The platform Runner's cluster rights to create a tenancy come from platform_k8s.
 resource "snapcd_depends_on_module" "app_tenancy_k8s" {
   module_id            = snapcd_module.app_tenancy_k8s.id
-  depends_on_module_id = snapcd_module.platform_k8s.id
+  depends_on_module_id = data.snapcd_module.platform_k8s.id
 }
 
 resource "snapcd_module_input_from_output_set" "app_tenancy_k8s" {
@@ -98,7 +100,7 @@ resource "snapcd_module_input_from_output_set" "app_tenancy_k8s" {
 }
 
 resource "snapcd_module" "app_tenancy_snapcd" {
-  depends_on           = [snapcd_runner_namespace_supply.this, snapcd_organization_role_assignment.platform_runner]
+  depends_on           = [snapcd_runner_namespace_supply.platform]
   name                 = "app_tenancy_snapcd"
   namespace_id         = module.namespace.id
   source_type          = "Git"
@@ -106,7 +108,7 @@ resource "snapcd_module" "app_tenancy_snapcd" {
   source_revision      = var.source_revision
   source_revision_type = "Default"
   source_subdirectory  = "teams/platform/roots/app-tenancy-snapcd"
-  runner_id            = snapcd_runner.platform.id
+  runner_id            = data.snapcd_runner.platform.id
 }
 
 resource "snapcd_module_input_from_literal" "app_tenancy_snapcd" {
@@ -146,7 +148,7 @@ resource "snapcd_module_input_from_output_set" "app_tenancy_snapcd" {
 }
 
 resource "snapcd_module" "app_runner" {
-  depends_on           = [snapcd_runner_namespace_supply.this, snapcd_organization_role_assignment.platform_runner]
+  depends_on           = [snapcd_runner_namespace_supply.platform]
   name                 = "app_runner"
   namespace_id         = module.namespace.id
   source_type          = "Git"
@@ -154,7 +156,7 @@ resource "snapcd_module" "app_runner" {
   source_revision      = var.source_revision
   source_revision_type = "Default"
   source_subdirectory  = "teams/platform/roots/app-runner"
-  runner_id            = snapcd_runner.platform.id
+  runner_id            = data.snapcd_runner.platform.id
 }
 
 resource "snapcd_module_input_from_literal" "app_runner" {

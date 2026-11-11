@@ -64,6 +64,7 @@ resource "snapcd_module_input_from_literal" "platform" {
     cluster_resource_group_name = var.cluster_resource_group_name
     cluster_oidc_issuer_url     = var.cluster_oidc_issuer_url
     platform_runner_client_id   = var.platform_runner_client_id
+    init_namespace_name         = var.init_namespace_name
   }
   name          = each.key
   literal_value = each.value

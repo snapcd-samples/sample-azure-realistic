@@ -20,3 +20,19 @@ resource "snapcd_module_input_from_literal" "platform_infra" {
   input_kind    = "Param"
   module_id     = snapcd_module.platform_infra.id
 }
+
+data "snapcd_namespace" "init" {
+  name     = var.init_namespace_name
+  stack_id = data.snapcd_stack.default.id
+}
+
+data "snapcd_module" "platform" {
+  name         = "platform"
+  namespace_id = data.snapcd_namespace.init.id
+}
+
+// The platform Module defines every Module in this namespace, so a destroy must remove them before it.
+resource "snapcd_depends_on_module" "platform_infra" {
+  module_id            = snapcd_module.platform_infra.id
+  depends_on_module_id = data.snapcd_module.platform.id
+}
