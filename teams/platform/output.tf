@@ -49,3 +49,7 @@ output "runner_client_id" {
 output "runner_service_principal_id" {
   value = snapcd_service_principal.platform_runner.id
 }
+
+output "app_tenancy_name" {
+  value = var.app_tenancy_name
+}

@@ -20,3 +20,11 @@ variable "chart_version" {
   description = "Version of the snapcd-runner chart at oci://ghcr.io/schrieksoft/charts."
   default     = "0.1.20"
 }
+variable "app_tenancy_name" {
+  description = "Name of the app tenancy: its Kubernetes namespace, Snap CD stack, namespace and Runner, and the prefix of its Azure resources."
+  default     = "app"
+}
+variable "app_runner_client_id" {
+  description = "Client ID of the Snap CD Service Principal the app Runner signs in as."
+  default     = "app-runner"
+}

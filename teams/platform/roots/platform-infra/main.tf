@@ -66,7 +66,7 @@ resource "azurerm_role_assignment" "akv_secrets_user" {
 resource "azurerm_role_definition" "tenancy_creator" {
   name        = "${var.name} tenancy creator"
   scope       = local.subscription
-  description = "Creates app tenancies: resource groups, managed identities and role assignments limited to the roles a tenancy hands out."
+  description = "Creates app tenancies: resource groups, managed identities, Key Vaults and role assignments limited to the roles a tenancy hands out."
 
   permissions {
     actions = [
@@ -75,6 +75,7 @@ resource "azurerm_role_definition" "tenancy_creator" {
       "Microsoft.Resources/subscriptions/resourceGroups/write",
       "Microsoft.Resources/subscriptions/resourceGroups/delete",
       "Microsoft.ManagedIdentity/userAssignedIdentities/*",
+      "Microsoft.KeyVault/*",
       "Microsoft.Authorization/roleAssignments/read",
       "Microsoft.Authorization/roleAssignments/write",
       "Microsoft.Authorization/roleAssignments/delete",

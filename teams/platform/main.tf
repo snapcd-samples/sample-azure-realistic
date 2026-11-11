@@ -58,6 +58,13 @@ resource "snapcd_runner_namespace_supply" "this" {
   namespace_id = module.namespace.id
 }
 
+// Owner: creating a tenancy creates stacks, Runners, Service Principals and their role assignments.
+resource "snapcd_organization_role_assignment" "platform_runner" {
+  principal_id            = snapcd_service_principal.platform_runner.id
+  principal_discriminator = "ServicePrincipal"
+  role_name               = "Owner"
+}
+
 resource "snapcd_state_store_role_assignment" "platform_runner" {
   state_store_id          = snapcd_state_store.platform.id
   principal_id            = snapcd_service_principal.platform_runner.id

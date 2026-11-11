@@ -29,6 +29,13 @@ resource "kubernetes_cluster_role_v1" "tenancy_creator" {
     verbs      = ["get", "list", "watch", "create", "update", "patch", "delete"]
   }
 
+  // Helm reads these to wait for an app Runner to come up.
+  rule {
+    api_groups = [""]
+    resources  = ["pods", "persistentvolumeclaims", "events"]
+    verbs      = ["get", "list", "watch"]
+  }
+
   rule {
     api_groups = ["apps"]
     resources  = ["statefulsets"]
