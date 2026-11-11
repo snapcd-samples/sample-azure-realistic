@@ -16,7 +16,7 @@ variable "server_url_from_runner" {
   default     = "http://snapcd-server.snapcd-server.svc.cluster.local:5000"
 }
 variable "source_url" {
-  default = "git@github.com:snapcd-samples/sample-deployment-azure.git"
+  default = "git@github.com:snapcd-samples/sample-azure-realistic.git"
 }
 variable "source_revision" {
   default = "main"
