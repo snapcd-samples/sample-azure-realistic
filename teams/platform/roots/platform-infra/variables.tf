@@ -5,6 +5,3 @@ variable "subscription_id" {}
 variable "administrator_object_id" {}
 variable "cluster_name" {}
 variable "cluster_resource_group_name" {}
-variable "backend_akv_name" {}
-variable "backend_akv_resource_group_name" {}
-variable "platform_runner_client_secret_name" {}

@@ -12,13 +12,12 @@ resource "snapcd_module" "platform_runner" {
 
 resource "snapcd_module_input_from_literal" "platform_runner" {
   for_each = {
-    name                      = var.name
-    chart_version             = var.chart_version
-    organization_id           = var.organization_id
-    server_url                = var.server_url_from_runner
-    runner_id                 = snapcd_runner.platform.id
-    runner_client_id          = var.platform_runner_client_id
-    runner_client_secret_name = var.platform_runner_client_secret_name
+    name             = var.name
+    chart_version    = var.chart_version
+    organization_id  = var.organization_id
+    server_url       = var.server_url_from_runner
+    runner_id        = snapcd_runner.platform.id
+    runner_client_id = var.platform_runner_client_id
   }
   name          = each.key
   literal_value = each.value

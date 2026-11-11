@@ -55,6 +55,7 @@ resource "snapcd_namespace_terraform_flag" "init" {
   flag         = each.value
 }
 
+// No password flag: the Runners are federated and set TF_HTTP_PASSWORD from their token.
 resource "snapcd_namespace_terraform_array_flag" "backend_config" {
   for_each = {
     address        = "${local.state_url}/$${NamespaceName}--$${ModuleName}"
@@ -63,7 +64,6 @@ resource "snapcd_namespace_terraform_array_flag" "backend_config" {
     lock_method    = "POST"
     unlock_method  = "POST"
     username       = "$${SNAPCD_CLIENT_ID}"
-    password       = "$${SNAPCD_CLIENT_SECRET}"
   }
   namespace_id = snapcd_namespace.this.id
   task         = "Init"

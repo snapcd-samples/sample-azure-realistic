@@ -18,6 +18,12 @@ resource "helm_release" "runner" {
       }
     }
 
+    // The Runner and its jobs authenticate with the projected ServiceAccount token, which matches
+    // the Federated Credential teams/platform creates.
+    credentials = {
+      mode = "Federated"
+    }
+
     config = {
       appsettings = {
         Runner = {
@@ -27,23 +33,6 @@ resource "helm_release" "runner" {
         }
         Server        = { Url = var.server_url }
         RunnerEnvVars = { SNAPCD_CLIENT_ID = var.runner_client_id }
-      }
-    }
-
-    // The client secret was put in the backend vault by hand; the Runner reads it with its workload identity.
-    externalSettings = {
-      content = {
-        PeriodInSeconds = 300
-        DueTimeSeconds  = 300
-        ReloadEnabled   = true
-        Providers = [{
-          Loader        = "AzureKeyVault"
-          Configuration = { VaultUrl = var.backend_akv_url }
-          Data = {
-            Runner        = { Credentials = { ClientSecret = var.runner_client_secret_name } }
-            RunnerEnvVars = { SNAPCD_CLIENT_SECRET = var.runner_client_secret_name }
-          }
-        }]
       }
     }
 

@@ -19,11 +19,6 @@ data "azurerm_kubernetes_cluster" "this" {
   resource_group_name = var.cluster_resource_group_name
 }
 
-data "azurerm_key_vault" "backend" {
-  name                = var.backend_akv_name
-  resource_group_name = var.backend_akv_resource_group_name
-}
-
 // Suffixed: the cluster's own resource group may already carry the platform's name.
 resource "azurerm_resource_group" "this" {
   name     = "${var.name}-team"
@@ -60,13 +55,6 @@ module "akv" {
 
 resource "azurerm_role_assignment" "akv_secrets_user" {
   scope                = module.akv.id
-  role_definition_name = "Key Vault Secrets User"
-  principal_id         = module.workload_identity.principal_id
-}
-
-// Scoped to the one secret, so the platform Runner reads nothing else in the backend vault.
-resource "azurerm_role_assignment" "client_secret_user" {
-  scope                = "${data.azurerm_key_vault.backend.id}/secrets/${var.platform_runner_client_secret_name}"
   role_definition_name = "Key Vault Secrets User"
   principal_id         = module.workload_identity.principal_id
 }
@@ -136,6 +124,6 @@ resource "azurerm_role_assignment" "aks_cluster_user" {
 
 // Key Vault data-plane role assignments take a few minutes to apply.
 resource "time_sleep" "role_propagation" {
-  depends_on      = [module.akv, azurerm_role_assignment.akv_secrets_user, azurerm_role_assignment.client_secret_user]
+  depends_on      = [module.akv, azurerm_role_assignment.akv_secrets_user]
   create_duration = "120s"
 }

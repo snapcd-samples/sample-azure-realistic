@@ -31,14 +31,10 @@ variable "administrator_object_id" {
 }
 variable "cluster_name" {}
 variable "cluster_resource_group_name" {}
-variable "backend_akv_name" {
-  description = "Existing Key Vault, filled by hand, holding the platform Runner's client secret."
+variable "cluster_oidc_issuer_url" {
+  description = "Issuer of the cluster's ServiceAccount tokens, which the platform Runner authenticates with: the cluster_oidc_issuer_url output of the cluster Module in snapcd-deployment-azure."
 }
-variable "backend_akv_resource_group_name" {}
 variable "platform_runner_client_id" {
-  description = "Client ID of the Snap CD service principal the platform Runner signs in as. Created by hand."
-}
-variable "platform_runner_client_secret_name" {
-  description = "Secret in the backend Key Vault holding that service principal's client secret."
-  default     = "snapcd-platform-runner-client-secret"
+  description = "Client ID of the Snap CD Service Principal the platform Runner signs in as. teams/platform creates it."
+  default     = "platform-runner"
 }

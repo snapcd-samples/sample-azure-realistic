@@ -12,10 +12,7 @@ resource "snapcd_module" "platform_infra" {
 
 resource "snapcd_module_input_from_literal" "platform_infra" {
   for_each = {
-    name                               = var.name
-    backend_akv_name                   = var.backend_akv_name
-    backend_akv_resource_group_name    = var.backend_akv_resource_group_name
-    platform_runner_client_secret_name = var.platform_runner_client_secret_name
+    name = var.name
   }
   name          = each.key
   literal_value = each.value

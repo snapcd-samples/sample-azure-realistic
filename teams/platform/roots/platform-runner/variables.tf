@@ -9,12 +9,8 @@ variable "server_url" {
 }
 variable "runner_id" {}
 variable "runner_client_id" {}
-variable "runner_client_secret_name" {
-  description = "Secret in the backend Key Vault holding the Runner's client secret."
-}
 
 // From platform_infra and platform_infra_config.
-variable "backend_akv_url" {}
 variable "platform_akv_name" {}
 variable "platform_workload_identity_client_id" {}
 variable "platform_runner_ssh_key_secret_name" {}

@@ -7,10 +7,6 @@ output "platform_akv_url" {
   depends_on = [time_sleep.role_propagation]
 }
 
-output "backend_akv_url" {
-  value = data.azurerm_key_vault.backend.vault_uri
-}
-
 output "platform_workload_identity_client_id" {
   value = module.workload_identity.client_id
 }
