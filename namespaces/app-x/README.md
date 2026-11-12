@@ -8,8 +8,6 @@ You apply this configuration by hand, from your machine, after `platform-tenanci
 | `sample_app_infra_config` | `modules/sample-app-infra-config` | The database user for the app's workload identity |
 | `sample_app` | `modules/sample-app` | The app's Deployment and ClusterIP Service in the tenancy's Kubernetes namespace. There is no ingress |
 
-`sample_app_infra` depends on the tenancy's `app_tenancy_k8s_runner` Module, so a destroy removes the sample app before the app-x Runner.
-
 ## Prerequisites
 
 1. `platform-tenancies` is applied, its Modules have run, and the app-x Runner is online.
@@ -27,7 +25,7 @@ You apply this configuration by hand, from your machine, after `platform-tenanci
    tofu apply
    ```
 
-   You need no tfvars file. The configuration reads the tenancy from the outputs of `platform-tenancies`, in `../platform-tenancies/terraform.tfstate`.
+   You need no tfvars file. The configuration finds the `default` stack, the `app-x` namespace and the `app-x` Runner by name.
 
 3. In the Dashboard, open the `app-x` namespace and approve the jobs of the sample app's Modules.
 

@@ -38,4 +38,4 @@ You apply this configuration by hand, from your machine, after `platform-core`. 
 
 ## State
 
-This configuration keeps its state in a local file, `terraform.tfstate`. Git ignores it. Keep the file: you need it to change or destroy what this configuration created, and `app-x` reads its outputs from it.
+This configuration keeps its state in a local file, `terraform.tfstate`. Git ignores it. Keep the file: you need it to change or destroy what this configuration created.

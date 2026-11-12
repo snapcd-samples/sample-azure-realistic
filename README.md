@@ -29,11 +29,11 @@ The namespaces use path filters, so a commit starts jobs only for the Modules wh
 | 2 | `namespaces/platform-tenancies` | The `platform-tenancies` namespace and the Modules | The platform Runner | The app-x tenancy: its resource group, the app-x Runner's identity, Key Vault and SSH key, the `app-x` Kubernetes namespace, the `app-x` namespace, State Store and Runner, and the app-x Runner's chart. See the [platform-tenancies README](namespaces/platform-tenancies/README.md) |
 | 3 | `namespaces/app-x` | The Modules in the `app-x` namespace | The app-x Runner | The sample app. See the [app-x README](namespaces/app-x/README.md) |
 
-`platform-tenancies` takes the Azure and cluster values from its `terraform.tfvars`, and finds the `platform-core` objects it builds on by name. `app-x` reads the outputs of `platform-tenancies` from its local state file.
+`platform-tenancies` takes the Azure and cluster values from its `terraform.tfvars`, and finds the `platform-core` objects it builds on by name. `app-x` finds the tenancy's namespace and Runner by name.
 
 The platform Modules in `platform-core` run on the `default` Runner because they deploy the platform Runner itself. The platform Runner is an Owner of the Snap CD organization, and has a custom Azure role and a ClusterRole that let it create tenancies and nothing more.
 
-The app-x Modules depend on the app-x Runner's Module, so a destroy removes them before that Runner.
+Destroy the namespaces in the reverse order: `app-x`, then `platform-tenancies`, then `platform-core`. Each one's Modules run on a Runner that the one before it deploys.
 
 ## Identities
 
@@ -57,7 +57,7 @@ Each Runner clones this repository over SSH with its own key. The key is generat
 
 ## State
 
-Each configuration under `namespaces/` keeps its state in a local `terraform.tfstate`, which Git ignores. Keep the files: you need them to change or destroy what the configurations created, and the next configuration reads them. The Modules keep their state in Snap CD State Stores: `platform` for the `platform-core` and `platform-tenancies` namespaces, and `app-x` for the `app-x` namespace.
+Each configuration under `namespaces/` keeps its state in a local `terraform.tfstate`, which Git ignores. Keep the files: you need them to change or destroy what the configurations created. The Modules keep their state in Snap CD State Stores: `platform` for the `platform-core` and `platform-tenancies` namespaces, and `app-x` for the `app-x` namespace.
 
 ## Connect to the cluster
 
