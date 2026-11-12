@@ -34,9 +34,12 @@ You apply this configuration by hand, from your machine, after `platform-tenanci
 The app has no ingress. Forward a local port to its Service:
 
 ```bash
-az aks get-credentials --name <cluster> --resource-group <resource-group>
-kubectl -n app-x port-forward service/sample-app 8080:80
+az aks get-credentials --subscription <subscription-id> --resource-group <resource-group> --name <cluster>
+kubelogin convert-kubeconfig -l azurecli
+kubectl --context <cluster> -n app-x port-forward service/sample-app 8080:80
 ```
+
+The cluster and its resource group are the `cluster_name` and `cluster_resource_group_name` of `platform-core`, for example `snapcd-demo` and `snapcd-demo`. The cluster uses Entra ID, so `kubelogin convert-kubeconfig` makes kubectl sign in with your Azure CLI login. You need it once, after `get-credentials`.
 
 Then open `http://localhost:8080`. The page shows whether the app can reach its database and its Key Vault.
 

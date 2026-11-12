@@ -10,8 +10,10 @@ module "namespace" {
   organization_id        = var.organization_id
   server_url_from_runner = var.server_url_from_runner
   azurerm                = true
-  subscription_id        = var.subscription_id
-  tenant_id              = var.tenant_id
+  // The app Runner cannot purge deleted Key Vaults; they stay soft-deleted for their retention period.
+  azurerm_purge_key_vaults_on_destroy = false
+  subscription_id                     = var.subscription_id
+  tenant_id                           = var.tenant_id
   params = {
     location                    = var.location
     tenant_id                   = var.tenant_id

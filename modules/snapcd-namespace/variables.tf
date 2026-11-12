@@ -26,3 +26,7 @@ variable "subscription_id" {
 variable "tenant_id" {
   default = ""
 }
+variable "azurerm_purge_key_vaults_on_destroy" {
+  description = "Purge a Key Vault when a Module destroys it. Purging needs a subscription-wide right, so turn it off for a namespace whose Runner has rights in its own resource group only."
+  default     = true
+}
