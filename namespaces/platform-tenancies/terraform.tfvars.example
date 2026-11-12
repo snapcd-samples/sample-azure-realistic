@@ -1,0 +1,8 @@
+tenant_id                     = ""
+subscription_id               = ""
+location                      = "eastus2"
+administrator_object_id       = ""
+
+cluster_name                  = ""
+cluster_resource_group_name   = ""
+cluster_oidc_issuer_url       = ""

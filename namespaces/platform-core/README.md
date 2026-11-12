@@ -83,7 +83,7 @@ The CLI is one self-contained file. It does not need a .NET runtime.
 
 ## State
 
-This configuration keeps its state in a local file, `terraform.tfstate`. Git ignores it. Keep the file: you need it to change or destroy what this configuration created, and `platform-tenancies` reads its outputs from it. The Modules keep their state in the `platform` State Store.
+This configuration keeps its state in a local file, `terraform.tfstate`. Git ignores it. Keep the file: you need it to change or destroy what this configuration created. The Modules keep their state in the `platform` State Store.
 
 ## Troubleshooting
 

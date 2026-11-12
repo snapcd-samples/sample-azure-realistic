@@ -29,11 +29,11 @@ The namespaces use path filters, so a commit starts jobs only for the Modules wh
 | 2 | `namespaces/platform-tenancies` | The `platform-tenancies` namespace and the Modules | The platform Runner | The app-x tenancy: its resource group, the app-x Runner's identity, Key Vault and SSH key, the `app-x` Kubernetes namespace, the `app-x` namespace, State Store and Runner, and the app-x Runner's chart. See the [platform-tenancies README](namespaces/platform-tenancies/README.md) |
 | 3 | `namespaces/app-x` | The Modules in the `app-x` namespace | The app-x Runner | The sample app. See the [app-x README](namespaces/app-x/README.md) |
 
-Each step reads the outputs of the step before from its local state file.
+`platform-tenancies` takes the Azure and cluster values from its `terraform.tfvars`, and finds the `platform-core` objects it builds on by name. `app-x` reads the outputs of `platform-tenancies` from its local state file.
 
 The platform Modules in `platform-core` run on the `default` Runner because they deploy the platform Runner itself. The platform Runner is an Owner of the Snap CD organization, and has a custom Azure role and a ClusterRole that let it create tenancies and nothing more.
 
-The destroy order follows Module dependencies across the namespaces: the app-x Modules before the app-x Runner, the tenancy Modules before the platform Runner.
+The app-x Modules depend on the app-x Runner's Module, so a destroy removes them before that Runner.
 
 ## Identities
 
