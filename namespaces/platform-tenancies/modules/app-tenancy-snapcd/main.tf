@@ -2,7 +2,9 @@ resource "snapcd_state_store" "this" {
   name = var.name
 }
 
+// Deleting the namespace deletes its Modules, which must be gone before the Runner they use is deleted.
 module "namespace" {
+  depends_on             = [snapcd_runner.this]
   source                 = "../../../../modules/snapcd-namespace"
   name                   = var.name
   stack_id               = var.stack_id
